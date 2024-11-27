@@ -1,0 +1,170 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz - League of Legends</title>
+    <link rel="stylesheet" href="css/stylesquiz.css">
+</head>
+<body>
+    <div class="main-container">
+        <div class="sidebar">
+            <h1>PerLeague</h1>
+            <p>Responda o quizz, seus pontos aparecerão logo abaixo.</p>
+            <div class="score-box">
+                <p>Pontos</p>
+                <p id="score">0</p>
+            </div>
+            <button id="exit-btn">Sair</button>
+        </div>
+        
+        <div class="quiz-container">
+            <h1>Quiz - League of Legends</h1>
+            <div id="quiz-content">
+                <!-- Perguntas renderizadas via JavaScript -->
+            </div>
+            <div class="navigation-buttons">
+                <button id="prev-btn" disabled>Voltar</button>
+                <button id="next-btn">Próxima</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="quiz.js"></script>
+</body>
+</html>
+
+<script>
+    document.getElementById("exit-btn").onclick = () => location.href = "dashboard.html";
+    // quiz.js
+
+const questions = [
+    {
+        question: "Qual é o nome do campeão que grita 'Demacia!'?",
+        options: ["Garen", "Darius", "Fiora"],
+        answer: 0,
+    },
+    {
+        question: "Qual destes é um suporte famoso em League of Legends?",
+        options: ["Yasuo", "Thresh", "Rengar"],
+        answer: 1,
+    },
+    {
+        question: "Qual é o monstro épico que dá um buff de ataque ao ser derrotado?",
+        options: ["Arauto do Vale", "Barão Nashor", "Dragão"],
+        answer: 1,
+    },
+    {
+        question: "Qual campeão é conhecido como 'O mestre das sombras'?",
+        options: ["Zed", "Akali", "Jhin"],
+        answer: 0,
+    },
+    {
+        question: "Quem é o irmão de Yasuo em League of Legends?",
+        options: ["Yone", "Rakan", "Sett"],
+        answer: 0,
+    },
+];
+
+let currentQuestionIndex = 0;
+let score = 0;
+
+// Element references
+const quizContent = document.getElementById("quiz-content");
+const prevBtn = document.getElementById("prev-btn");
+const nextBtn = document.getElementById("next-btn");
+const scoreBox = document.getElementById("score");
+
+// Render current question
+function renderQuestion(index) {
+    const question = questions[index];
+    quizContent.innerHTML = `
+        <h2>${question.question}</h2>
+        ${question.options
+            .map(
+                (option, i) =>
+                    `<label>
+                        <input type="radio" name="answer" value="${i}">
+                        ${option}
+                    </label>`
+            )
+            .join("")}
+    `;
+}
+
+// Validate answer
+function validateAnswer() {
+    const selectedOption = document.querySelector('input[name="answer"]:checked');
+    if (selectedOption) {
+        const answer = parseInt(selectedOption.value, 10);
+        if (answer === questions[currentQuestionIndex].answer) {
+            score++;
+        }
+    }
+}
+
+// Buttons event listeners
+nextBtn.addEventListener("click", () => {
+    validateAnswer();
+    currentQuestionIndex++;
+    if (currentQuestionIndex === questions.length - 1) {
+        nextBtn.textContent = "Finalizar";
+        nextBtn.onclick = function() {salvardados()}
+    }
+    if (currentQuestionIndex >= questions.length) {
+        quizContent.innerHTML = `<h2>Você terminou! Pontuação: ${score}/${questions.length}</h2>`;
+        nextBtn.style.display = "none";
+        prevBtn.style.display = "none";
+        return;
+    }
+    renderQuestion(currentQuestionIndex);
+    prevBtn.disabled = false;
+    scoreBox.textContent = score;
+});
+
+prevBtn.addEventListener("click", () => {
+    currentQuestionIndex--;
+    renderQuestion(currentQuestionIndex);
+    if (currentQuestionIndex === 0) {
+        prevBtn.disabled = true;
+    }
+    nextBtn.textContent = "Próxima";
+});
+
+// Initialize quiz
+renderQuestion(currentQuestionIndex);
+
+function salvardados() {
+        var idUsuarioVar = sessionStorage.ID_USUARIO;
+
+        // Enviando o valor da nova input
+        fetch("/quiz/salvardados", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                // Variaveis aqui...
+                pontuacaousuario: score,
+                idusuario: idUsuarioVar
+
+            }),
+        })
+            .then(function (resposta) {
+                console.log("resposta: ", resposta);
+
+                if (resposta.ok) {
+                    console.log(`resultado registrado`)
+                } else {
+                    throw "Houve um erro ao tentar realizar o cadastro!";
+                }
+            })
+            .catch(function (resposta) {
+                console.log(`#ERRO: ${resposta}`);
+            });
+
+        return false;
+    }
+
+</script>

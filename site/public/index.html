@@ -1,0 +1,61 @@
+<!DOCTYPE html> 
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>League of Legends - Capítulo Quatro</title>
+  <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <ul>
+        <li><a href="index.html">Início</a></li>
+      </ul>
+      <div class="user-actions">
+        <a href="login.html" class="btn">Login</a>
+        <a href="cadastro.html" class="btn btn-highlight">Cadastre-se</a>
+      </div>
+    </nav>
+  </header>
+  <main>
+    <section class="chapter">
+      <h1>League of Legends</h1>
+      <h2>Um jogo de estratégia</h2>
+      <div class="divider"></div>
+
+      <!-- Adicionando texto -->
+      <p>
+        League of Legends é um dos jogos de estratégia em tempo real mais populares do mundo.
+        Com uma comunidade vibrante e jogabilidade intensa, é um jogo que desafia a inteligência
+        e o trabalho em equipe de seus jogadores.
+      </p>
+
+      <!-- Adicionando imagem -->
+      <img id="imageSwitcher" src="https://steamuserimages-a.akamaihd.net/ugc/2006968477812694857/5305D7E526AF51E0E8DE51F3DB0ADA3D2D5DDB85/?imw=637&imh=358&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=true" alt="Imagem inicial de League of Legends">
+      <!-- Outro parágrafo de texto -->
+      <p>
+        Escolha seu campeão, coordene com sua equipe e lute para alcançar a vitória! 
+        Cada partida é uma nova experiência, cheia de surpresas e desafios.
+      </p>
+    </section>
+  </main>
+</body>
+</html>
+<script>
+  const images = [
+    'https://steamuserimages-a.akamaihd.net/ugc/2006968477812694857/5305D7E526AF51E0E8DE51F3DB0ADA3D2D5DDB85/?imw=637&imh=358&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=true',
+    'https://i.pinimg.com/736x/ee/75/56/ee7556111a6c9a5221ec6c0608790c2e.jpg',
+    'https://s.zst.com.br/cms-assets/2022/04/projeto-vayne.webp',
+    'https://displays.riotgames.com/static/champion-kayn-splash-059f27638483f53898d6be693d20b446.jpg',
+    'https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Kindred_0.jpg'
+  ];
+
+  let currentImageIndex = 0;
+  const imageElement = document.getElementById('imageSwitcher');
+
+  imageElement.addEventListener('click', () => {
+    currentImageIndex = (currentImageIndex + 1) % images.length;
+    imageElement.src = images[currentImageIndex];
+  });
+</script>
